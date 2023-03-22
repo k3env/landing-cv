@@ -4,9 +4,7 @@ import { SectionHeading } from '../components/SectionHeading';
 function PostPreview({ pubdate, preview, title, link }) {
   const date = new Date(pubdate);
   const pDay = new Intl.DateTimeFormat('ru-RU', { day: '2-digit' }).format(date);
-  const pMon = new Intl.DateTimeFormat('ru-RU', {
-    month: 'short',
-  }).format(date);
+  const pMon = new Intl.DateTimeFormat('ru-RU', { month: 'short' }).format(date);
   return (
     <div className="col-lg-4 mb-5">
       <div className="position-relative mb-4">
@@ -28,7 +26,7 @@ export function Blog({ hidden }) {
   if (hidden) return <div />;
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    fetch('https://demo.ghost.io/ghost/api/content/posts/?key=22444f78447824223cefc48062')
+    fetch('https://blog.k3env.site/ghost/api/content/posts/?key=64ad4584f3d8b19543b58b1af8')
       .then((r) => r.json())
       .then((p) =>
         setPosts(
@@ -53,7 +51,7 @@ export function Blog({ hidden }) {
           {posts.length > 0 ? (
             posts.map((p) => <PostPreview key={p.id} {...p} />)
           ) : (
-            <div className="col-12">Ничего нет</div>
+            <div className="col-12 ">Ничего нет</div>
           )}
         </div>
       </div>
