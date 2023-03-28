@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from 'react-bootstrap';
 
 export function NavBar({ hidden, links }) {
   // console.log(className);
@@ -16,7 +17,7 @@ export function NavBar({ hidden, links }) {
 
   return (
     <nav className={classList.join(' ')}>
-      <a href="index.html" className="navbar-brand ml-lg-3">
+      <a href="/" className="navbar-brand ml-lg-3">
         <h1 className="m-0 display-5">
           <span className="text-primary">K3</span>Env
         </h1>
@@ -45,9 +46,9 @@ export function NavBar({ hidden, links }) {
             </a>
           ))}
         </div>
-        <button type="button" className="btn btn-outline-primary d-none d-lg-block">
+        <Button variant="outline-primary" type="button" className="d-none d-lg-block">
           Hire Me
-        </button>
+        </Button>
       </div>
     </nav>
   );

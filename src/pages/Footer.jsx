@@ -1,3 +1,5 @@
+import { Button, Container } from 'react-bootstrap';
+
 function SocialBtn({ social, user }) {
   let link = '';
   let icon = '';
@@ -19,15 +21,15 @@ function SocialBtn({ social, user }) {
       break;
   }
   return (
-    <a className="btn btn-light btn-social mr-2" href={link}>
+    <Button as="a" variant="light" className="btn-social mr-2" href={link}>
       <i className={iconCls ?? `fa-solid ${icon}`} />
-    </a>
+    </Button>
   );
 }
 export function Footer() {
   return (
-    <div className="container-fluid bg-primary text-white mt-5 py-5 px-sm-3 px-md-5">
-      <div className="container text-center py-5">
+    <Container fluid className="bg-primary text-white mt-5 py-5 px-sm-3 px-md-5">
+      <Container className="text-center py-5">
         <div className="d-flex justify-content-center mb-4">
           <SocialBtn social="tg" user="k3env" />
           <SocialBtn social="github" user="k3env" />
@@ -42,7 +44,7 @@ export function Footer() {
             HTML Codex
           </a>
         </p>
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 }

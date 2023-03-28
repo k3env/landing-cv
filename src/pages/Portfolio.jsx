@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
 import Slider from 'react-slick';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
+import { Col, Row, Modal, Badge, Container, Image, ListGroup, Stack, Button } from 'react-bootstrap';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
-import Badge from 'react-bootstrap/Badge';
 import { SectionHeading } from '../components/SectionHeading';
 
 function TagSection({ filter, setFilter }) {
@@ -16,11 +12,9 @@ function TagSection({ filter, setFilter }) {
       .then((v) => setTags(v.data));
   }, []);
 
-  // const { tags } = data;
-
   return (
-    <div className="row">
-      <div className="col-12 text-center mb-2">
+    <Row>
+      <Col className="text-center mb-2">
         <ul
           className="list-inline mb-4"
           id="portfolio-flters"
@@ -32,8 +26,8 @@ function TagSection({ filter, setFilter }) {
             <FilterButton key={f._id} filter={f._id} label={f.label} active={filter === f._id} />
           ))}
         </ul>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 }
 
@@ -50,7 +44,7 @@ function PortfolioItem({ images, title, description, tags }) {
     arrows: true,
   };
   return (
-    <div className="col-lg-4 col-md-6 mb-4 portfolio-item">
+    <Col lg={4} md={6} className="mb-4 portfolio-item">
       <div className="position-relative overflow-hidden mb-2">
         <img className="img-fluid rounded w-100" src={images[0].image.url} alt="" />
         <div className="portfolio-btn bg-primary d-flex align-items-center justify-content-center">
@@ -69,7 +63,7 @@ function PortfolioItem({ images, title, description, tags }) {
                   <Slider {...settings}>
                     {images.map((i) => (
                       <div key={i.id} className="position-relative mb-2">
-                        <img className="img-fluid rounded w-100" src={i.image.url} alt="" style={{ width: '100px' }} />
+                        <Image fluid rounded width="100%" src={i.image.url} alt="" style={{ width: '100px' }} />
                       </div>
                     ))}
                   </Slider>
@@ -91,7 +85,7 @@ function PortfolioItem({ images, title, description, tags }) {
           </Modal.Body>
         </Modal>
       </div>
-    </div>
+    </Col>
   );
 }
 
@@ -116,16 +110,16 @@ export function Portfolio({ hidden }) {
   if (fetching) return <div />;
 
   return (
-    <div className="container-fluid pt-5 pb-3" id="portfolio">
-      <div className="container">
+    <Container fluid className="pt-5 pb-3" id="portfolio">
+      <Container>
         <SectionHeading bgText="Галерея" title="Портфолио" />
         <TagSection filter={filter} setFilter={setFilter} />
-        <div className="row portfolio-container">
+        <Row className="row portfolio-container">
           {data.projects.map((p) => (
             <PortfolioItem key={p.id} {...p} />
           ))}
-        </div>
-      </div>
-    </div>
+        </Row>
+      </Container>
+    </Container>
   );
 }
