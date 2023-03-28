@@ -1,39 +1,22 @@
-import { DocumentRenderer } from '@keystone-6/document-renderer';
-import { useQuery } from 'urql';
+// import { DocumentRenderer } from '@keystone-6/document-renderer';
+import { useEffect, useState } from 'react';
+// import { useQuery } from 'urql';
+import ReactHtmlParser from 'react-html-parser';
 import { SectionHeading } from '../components/SectionHeading';
 
 export function About({ hidden }) {
   if (hidden) return <div />;
-  // const profile = undefined;
-
-  const r = `
-  query {
-    profile {
-      name,
-      bioPhoto {
-        url
-      },
-      bioHeader,
-      bioProfile {
-        document
-      },
-      degree,
-      birth,
-      experience,
-      phone,
-      email,
-      address,
-      freelancer
-    }
-  }`;
 
   const placeholder = <div className="container-fluid py-5" style={{ height: '550px' }} />;
-
-  const [res] = useQuery({ query: r });
-  const { data, fetching, error } = res;
-  if (fetching) return placeholder;
-  if (error) return placeholder;
-  const { profile } = data;
+  const [about, setAbout] = useState(null);
+  useEffect(() => {
+    fetch('http://localhost:3000/api/v1/profile')
+      .then((response) => response.json())
+      .then((a) => setAbout(a.data));
+  }, []);
+  if (about === null) {
+    return placeholder;
+  }
 
   return (
     <div className="container-fluid py-5" id="about">
@@ -41,54 +24,59 @@ export function About({ hidden }) {
         <SectionHeading bgText="Обо мне" title="Обо мне" />
         <div className="row align-items-center">
           <div className="col-lg-5 pb-4 pb-lg-0">
-            <img className="img-fluid rounded w-100" src={profile.bioPhoto.url} alt="" />
+            <img
+              className="img-fluid rounded w-100"
+              src={`http://localhost:3000/public/${about.about_photo}.jpg`}
+              alt=""
+            />
           </div>
           <div className="col-lg-7">
-            <h3 className="mb-4">{profile.bioHeader ?? ''}</h3>
+            <h3 className="mb-4">{about.about_header ?? ''}</h3>
             {/* <ReactMarkdown remarkPlugins={[gfm]}>{data.profile.bioProfile.document}</ReactMarkdown> */}
-            <DocumentRenderer document={profile.bioProfile.document ?? {}} />
+            {/* <DocumentRenderer document={profile.bioProfile.document ?? {}} /> */}
+            <div>{ReactHtmlParser(about.about_summary)}</div>
             <div className="row mb-3">
               <div className="col-sm-6 py-2">
                 <h6>
-                  Имя: <span className="text-secondary">{profile.name ?? ''}</span>
+                  Имя: <span className="text-secondary">{about.name ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
                   День рождения:{' '}
                   <span className="text-secondary">
-                    {new Intl.DateTimeFormat('ru-RU').format(new Date(profile.birth ?? Date.now()))}
+                    {new Intl.DateTimeFormat('ru-RU').format(new Date(about.birth ?? Date.now()))}
                   </span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Уровень: <span className="text-secondary">{profile.degree ?? ''}</span>
+                  Уровень: <span className="text-secondary">{about.degree ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Опыт: <span className="text-secondary">{profile.experience ?? ''}</span>
+                  Опыт: <span className="text-secondary">{about.experience ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Телефон: <span className="text-secondary">{profile.phone ?? ''}</span>
+                  Телефон: <span className="text-secondary">{about.phone ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Email: <span className="text-secondary">{profile.email ?? ''}</span>
+                  Email: <span className="text-secondary">{about.email ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Адрес: <span className="text-secondary">{profile.address ?? ''}</span>
+                  Адрес: <span className="text-secondary">{about.address ?? ''}</span>
                 </h6>
               </div>
               <div className="col-sm-6 py-2">
                 <h6>
-                  Фриланс: <span className="text-secondary">{profile.freelancer ? 'Беру заказы' : 'Недоступен'}</span>
+                  Фриланс: <span className="text-secondary">{about.freelancer ? 'Беру заказы' : 'Недоступен'}</span>
                 </h6>
               </div>
             </div>

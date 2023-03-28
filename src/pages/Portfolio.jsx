@@ -1,29 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Slider from 'react-slick';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
-import { useQuery } from 'urql';
 import Badge from 'react-bootstrap/Badge';
 import { SectionHeading } from '../components/SectionHeading';
 
 function TagSection({ filter, setFilter }) {
-  const r = `
-  query {
-    tags {
-      id
-      name
-    }
-  }`;
+  const [tags, setTags] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:3000/api/v1/tags')
+      .then((r) => r.json())
+      .then((v) => setTags(v.data));
+  }, []);
 
-  const [res] = useQuery({ query: r });
-  const { data, fetching, error } = res;
-  if (error) return <div>{error.message}</div>;
-  if (fetching) return <div />;
-
-  const { tags } = data;
+  // const { tags } = data;
 
   return (
     <div className="row">
@@ -35,7 +28,8 @@ function TagSection({ filter, setFilter }) {
         >
           <FilterButton filter="*" label="Всё" active={filter === '*'} />
           {tags.map((f) => (
-            <FilterButton key={f.id} filter={f.id} label={f.name} active={filter === f.id} />
+            // eslint-disable-next-line no-underscore-dangle
+            <FilterButton key={f._id} filter={f._id} label={f.label} active={filter === f._id} />
           ))}
         </ul>
       </div>
@@ -115,33 +109,8 @@ function FilterButton({ active, label, filter }) {
 
 export function Portfolio({ hidden }) {
   if (hidden) return <div />;
-  const r = `
-  query($where: ProjectWhereInput!) {
-    projects(where: $where) {
-      id
-      title
-      images {
-        id
-        image {
-          url
-        }
-      }
-      tags {
-        id
-        name
-      }
-      description {
-        document
-      }
-    }
-  }`;
-
   const [filter, setFilter] = useState('*');
-  const [res] = useQuery({
-    query: r,
-    variables: filter === '*' ? { where: {} } : { where: { tags: { some: { id: { equals: filter } } } } },
-  });
-  const { data, fetching, error } = res;
+  const { data, error, fetching } = { data: { projects: [] }, error: undefined, fetching: false };
 
   if (error) return <div />;
   if (fetching) return <div />;

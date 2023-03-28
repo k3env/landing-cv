@@ -1,6 +1,5 @@
 import './App.css';
 import { useState } from 'react';
-import { createClient, Provider } from 'urql';
 import { NavBar } from './pages/NavBar';
 import { Header } from './pages/Header';
 import { About } from './pages/About';
@@ -66,15 +65,14 @@ function App() {
   // REFACTOR: minify `index.css`
 
   const navBarLinks = links.filter((l) => l.hidden !== true).map((l) => ({ title: l.title, link: l.link }));
-  const client = createClient({ url: `${import.meta.env.VITE_BACKEND_URL}/api/graphql` });
 
   return (
     <div className="App" id="app">
-      <Provider value={client}>
-        <NavBar hidden={!showNav} links={navBarLinks} />
-        {links.filter((l) => l.hidden !== true).map((l) => l.component)}
-        <Footer />
-      </Provider>
+      {/* <Provider value={client}> */}
+      <NavBar hidden={!showNav} links={navBarLinks} />
+      {links.filter((l) => l.hidden !== true).map((l) => l.component)}
+      <Footer />
+      {/* </Provider> */}
     </div>
   );
 }

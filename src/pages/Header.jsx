@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ReactTypingEffect from 'react-typing-effect';
-import { useQuery } from 'urql';
 import { useOnScreen } from '../hooks/useOnScreen';
 
 export function Header({ onIntersect }) {
@@ -8,32 +7,32 @@ export function Header({ onIntersect }) {
     threshold: 0.1,
     root: null,
   });
-  const r = `
-  query {
-    profile {
-      name,
-      profilePhoto {
-        url
-      },
-      labels
-    }
-  }`;
   const placeholder = (
     <div className="container-fluid bg-primary d-flex align-items-center mb-5 py-5" style={{ minHeight: '100vh' }} />
   );
-  const [res] = useQuery({ query: r });
-  const { data, fetching, error } = res;
 
   useEffect(() => {
     onIntersect(onScreen);
   }, [onScreen]);
-  if (fetching) {
+  const [profile, load] = useState(null);
+  const [profilePic, loadPic] = useState(undefined);
+  useEffect(() => {
+    fetch('http://localhost:3000/api/v1/profile')
+      .then((response) => response.json())
+      .then((a) => load(a.data));
+  }, []);
+  useEffect(() => {
+    if (profile !== null) {
+      fetch(`http://localhost:3000/api/v1/files/${profile.profilePhoto}`)
+        .then((response) => response.json())
+        .then((pp) => loadPic(pp.data));
+    }
+  }, [profile !== null]);
+  if (profile === null || profilePic === undefined) {
     return placeholder;
   }
-  if (error) return placeholder;
-  const { profile } = data;
 
-  const ttLabels = profile.labels.split('\n'); // ['Web Developer', 'Front End Developer', 'Back End Developer', 'DevOps Engineer'];
+  const ttLabels = ['Web Developer', 'Front End Developer', 'Back End Developer', 'DevOps Engineer'];
   return (
     <div
       className="container-fluid bg-primary d-flex align-items-center mb-5 py-5"
@@ -46,7 +45,7 @@ export function Header({ onIntersect }) {
           <div className="col-lg-5 px-5 pl-lg-0 pb-5 pb-lg-0">
             <img
               className="img-fluid w-100 rounded-circle shadow-sm"
-              src={profile.profilePhoto.url ?? 'https://placehold.co/400'}
+              src={profilePic.url ?? 'https://placehold.co/400'}
               alt=""
             />
           </div>
