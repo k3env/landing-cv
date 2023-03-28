@@ -7,7 +7,7 @@ import { SectionHeading } from '../components/SectionHeading';
 function TagSection({ filter, setFilter }) {
   const [tags, setTags] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/tags')
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/tags`)
       .then((r) => r.json())
       .then((v) => setTags(v.data));
   }, []);
@@ -31,7 +31,7 @@ function TagSection({ filter, setFilter }) {
   );
 }
 
-function PortfolioItem({ images, title, description, tags }) {
+function PortfolioItem({ title, cover, images, description, tags }) {
   const [show, setShow] = useState(false);
   const settings = {
     dots: true,
@@ -46,7 +46,7 @@ function PortfolioItem({ images, title, description, tags }) {
   return (
     <Col lg={4} md={6} className="mb-4 portfolio-item">
       <div className="position-relative overflow-hidden mb-2">
-        <img className="img-fluid rounded w-100" src={images[0].image.url} alt="" />
+        <img className="img-fluid rounded w-100" src={cover.url} alt="" />
         <div className="portfolio-btn bg-primary d-flex align-items-center justify-content-center">
           <a onClick={() => setShow(true)}>
             <i className="fa fa-plus text-white" style={{ fontSize: '60px' }} />
@@ -104,10 +104,12 @@ function FilterButton({ active, label, filter }) {
 export function Portfolio({ hidden }) {
   if (hidden) return <div />;
   const [filter, setFilter] = useState('*');
-  const { data, error, fetching } = { data: { projects: [] }, error: undefined, fetching: false };
-
-  if (error) return <div />;
-  if (fetching) return <div />;
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/projects`)
+      .then((r) => r.json())
+      .then((v) => setProjects(v.data));
+  }, []);
 
   return (
     <Container fluid className="pt-5 pb-3" id="portfolio">
@@ -115,7 +117,7 @@ export function Portfolio({ hidden }) {
         <SectionHeading bgText="Галерея" title="Портфолио" />
         <TagSection filter={filter} setFilter={setFilter} />
         <Row className="row portfolio-container">
-          {data.projects.map((p) => (
+          {projects.map((p) => (
             <PortfolioItem key={p.id} {...p} />
           ))}
         </Row>

@@ -21,7 +21,7 @@ export function Header({ onIntersect }) {
   }, [onScreen]);
   const [profile, load] = useState(null);
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/profile?aggregated=true')
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/profile?aggregated=true`)
       .then((response) => response.json())
       .then((a) => load(a.data));
   }, []);

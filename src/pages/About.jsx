@@ -9,7 +9,7 @@ export function About({ hidden }) {
   const placeholder = <Container fluid className="py-5" style={{ height: '550px' }} />;
   const [about, setAbout] = useState(null);
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/profile?aggregated=true')
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/profile?aggregated=true`)
       .then((response) => response.json())
       .then((a) => setAbout(a.data));
   }, []);
