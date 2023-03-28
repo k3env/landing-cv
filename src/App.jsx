@@ -1,16 +1,18 @@
 import './App.css';
 import { useState } from 'react';
-import { NavBar } from './pages/NavBar';
-import { Header } from './pages/Header';
-import { About } from './pages/About';
-import { Qualification } from './pages/Qualification';
-import { Skills } from './pages/Skills';
-import { Services } from './pages/Services';
-import { Portfolio } from './pages/Portfolio';
-import { Testimonial } from './pages/Testimonial';
-import { Blog } from './pages/Blog';
-import { ContactForm } from './pages/ContactForm';
-import { Footer } from './pages/Footer';
+import {
+  NavBar,
+  Header,
+  About,
+  Qualification,
+  Skills,
+  Services,
+  Portfolio,
+  Testimonial,
+  Blog,
+  ContactForm,
+  Footer,
+} from './pages';
 
 function App() {
   const [showNav, setVisibility] = useState(false);
@@ -55,24 +57,14 @@ function App() {
       component: <ContactForm key="sect-contact" />,
     },
   ];
-  // TODO: maybe Strapi for backend?
-  // TODO: add component for recent github activity
-  // TODO: Blog: change api url from demo to prod blog
-  // TODO: Contact form: remove or add API?
-  // TODO: "Hire me" buttons - add api
-  // TODO: Analytics?
-  // REFACTOR: remove unused imports, packages and assets
-  // REFACTOR: minify `index.css`
 
   const navBarLinks = links.filter((l) => l.hidden !== true).map((l) => ({ title: l.title, link: l.link }));
 
   return (
     <div className="App" id="app">
-      {/* <Provider value={client}> */}
       <NavBar hidden={!showNav} links={navBarLinks} />
       {links.filter((l) => l.hidden !== true).map((l) => l.component)}
       <Footer />
-      {/* </Provider> */}
     </div>
   );
 }
