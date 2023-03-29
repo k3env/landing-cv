@@ -1,33 +1,20 @@
-import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
-import { DocumentRenderer } from '@keystone-6/document-renderer';
-import { useQuery } from 'urql';
-import Badge from 'react-bootstrap/Badge';
+import { Col, Row, Modal, Badge, Container, Image, Button } from 'react-bootstrap';
+import ReactHtmlParser from 'react-html-parser';
 import { SectionHeading } from '../components/SectionHeading';
 
 function TagSection({ filter, setFilter }) {
-  const r = `
-  query {
-    tags {
-      id
-      name
-    }
-  }`;
-
-  const [res] = useQuery({ query: r });
-  const { data, fetching, error } = res;
-  if (error) return <div>{error.message}</div>;
-  if (fetching) return <div />;
-
-  const { tags } = data;
+  const [tags, setTags] = useState([]);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/tags`)
+      .then((r) => r.json())
+      .then((v) => setTags(v.data));
+  }, []);
 
   return (
-    <div className="row">
-      <div className="col-12 text-center mb-2">
+    <Row>
+      <Col className="text-center mb-2">
         <ul
           className="list-inline mb-4"
           id="portfolio-flters"
@@ -35,15 +22,23 @@ function TagSection({ filter, setFilter }) {
         >
           <FilterButton filter="*" label="Всё" active={filter === '*'} />
           {tags.map((f) => (
-            <FilterButton key={f.id} filter={f.id} label={f.name} active={filter === f.id} />
+            <FilterButton key={f._id} filter={f._id} label={f.label} active={filter === f._id} />
           ))}
         </ul>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 }
 
-function PortfolioItem({ images, title, description, tags }) {
+function FilterButton({ active, label, filter }) {
+  return (
+    <Button as="li" size="sm" variant="outline-primary" active={active} className="m-1" data-filter={filter}>
+      {label}
+    </Button>
+  );
+}
+
+function PortfolioItem({ title, cover, images, description, tags }) {
   const [show, setShow] = useState(false);
   const settings = {
     dots: true,
@@ -56,9 +51,9 @@ function PortfolioItem({ images, title, description, tags }) {
     arrows: true,
   };
   return (
-    <div className="col-lg-4 col-md-6 mb-4 portfolio-item">
+    <Col lg={4} md={6} className="mb-4 portfolio-item">
       <div className="position-relative overflow-hidden mb-2">
-        <img className="img-fluid rounded w-100" src={images[0].image.url} alt="" />
+        <Image fluid rounded width="100%" src={cover.url} alt="" />
         <div className="portfolio-btn bg-primary d-flex align-items-center justify-content-center">
           <a onClick={() => setShow(true)}>
             <i className="fa fa-plus text-white" style={{ fontSize: '60px' }} />
@@ -73,21 +68,24 @@ function PortfolioItem({ images, title, description, tags }) {
               <Row>
                 <Col xs={12} md={6} className="mb-5">
                   <Slider {...settings}>
+                    <div key={cover._id} className="position-relative mb-2">
+                      <Image fluid rounded width="100%" src={cover.url} alt="" />
+                    </div>
                     {images.map((i) => (
-                      <div key={i.id} className="position-relative mb-2">
-                        <img className="img-fluid rounded w-100" src={i.image.url} alt="" style={{ width: '100px' }} />
+                      <div key={i._id} className="position-relative mb-2">
+                        <Image fluid rounded width="100%" src={i.url} alt="" />
                       </div>
                     ))}
                   </Slider>
                 </Col>
                 <Col xs={12} md={6}>
-                  <DocumentRenderer document={description.document} />
+                  <div>{ReactHtmlParser(description)}</div>
                 </Col>
                 <Row>
                   <Col xs={12}>
                     {tags.map((t) => (
-                      <Badge pill text="light" key={t.id} className="p-2 mx-1">
-                        {t.name}
+                      <Badge pill text="light" key={t._id} className="p-2 mx-1">
+                        {t.label}
                       </Badge>
                     ))}
                   </Col>
@@ -97,66 +95,31 @@ function PortfolioItem({ images, title, description, tags }) {
           </Modal.Body>
         </Modal>
       </div>
-    </div>
-  );
-}
-
-function FilterButton({ active, label, filter }) {
-  const classList = ['btn', 'btn-sm', 'btn-outline-primary', 'm-1'];
-  if (active) {
-    classList.push('active');
-  }
-  return (
-    <li className={classList.join(' ')} data-filter={filter}>
-      {label}
-    </li>
+    </Col>
   );
 }
 
 export function Portfolio({ hidden }) {
   if (hidden) return <div />;
-  const r = `
-  query($where: ProjectWhereInput!) {
-    projects(where: $where) {
-      id
-      title
-      images {
-        id
-        image {
-          url
-        }
-      }
-      tags {
-        id
-        name
-      }
-      description {
-        document
-      }
-    }
-  }`;
-
   const [filter, setFilter] = useState('*');
-  const [res] = useQuery({
-    query: r,
-    variables: filter === '*' ? { where: {} } : { where: { tags: { some: { id: { equals: filter } } } } },
-  });
-  const { data, fetching, error } = res;
-
-  if (error) return <div />;
-  if (fetching) return <div />;
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/projects?aggregated`)
+      .then((r) => r.json())
+      .then((v) => setProjects(v.data));
+  }, []);
 
   return (
-    <div className="container-fluid pt-5 pb-3" id="portfolio">
-      <div className="container">
+    <Container fluid className="pt-5 pb-3" id="portfolio">
+      <Container>
         <SectionHeading bgText="Галерея" title="Портфолио" />
         <TagSection filter={filter} setFilter={setFilter} />
-        <div className="row portfolio-container">
-          {data.projects.map((p) => (
-            <PortfolioItem key={p.id} {...p} />
+        <Row className="portfolio-container">
+          {projects.map((p) => (
+            <PortfolioItem key={p._id} {...p} />
           ))}
-        </div>
-      </div>
-    </div>
+        </Row>
+      </Container>
+    </Container>
   );
 }

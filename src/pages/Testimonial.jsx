@@ -1,3 +1,4 @@
+import { Col, Container, Image, Row } from 'react-bootstrap';
 import Slider from 'react-slick';
 import { SectionHeading } from '../components/SectionHeading';
 
@@ -6,8 +7,10 @@ function CustomerReview({ review, image, name, profession }) {
     <div className="text-center">
       <i className="fa fa-3x fa-quote-left text-primary mb-4" />
       <h4 className="font-weight-light mb-4">{review}</h4>
-      <img
-        className="img-fluid rounded-circle mx-auto mb-3"
+      <Image
+        fluid
+        roundedCircle
+        className="mx-auto mb-3"
         src={image}
         style={{ width: '80px', height: '80px' }}
         alt=""
@@ -60,19 +63,19 @@ export function Testimonial({ hidden }) {
     slidesToScroll: 1,
   };
   return (
-    <div className="container-fluid py-5" id="testimonial">
-      <div className="container">
+    <Container fluid className="py-5" id="testimonial">
+      <Container>
         <SectionHeading bgText="Отзывы" title="Рекомендации клиентов" />
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
+        <Row className="justify-content-center">
+          <Col lg={8}>
             <Slider {...settings}>
               {customers.map((c) => (
                 <CustomerReview key={c.id} {...c} />
               ))}
             </Slider>
-          </div>
-        </div>
-      </div>
-    </div>
+          </Col>
+        </Row>
+      </Container>
+    </Container>
   );
 }

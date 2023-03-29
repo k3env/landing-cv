@@ -1,4 +1,4 @@
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import { Col, Container, ProgressBar, Row } from 'react-bootstrap';
 import { SectionHeading } from '../components/SectionHeading';
 
 export function Skills({ hidden }) {
@@ -12,12 +12,12 @@ export function Skills({ hidden }) {
     { label: 'Docker', progress: 80, color: 'blue' },
   ];
   return (
-    <div className="container-fluid py-5" id="skill">
-      <div className="container">
+    <Container fluid className="py-5" id="skill">
+      <Container>
         <SectionHeading bgText="Навыки" title="Мои навыки" />
-        <div className="row align-items-center">
+        <Row className="align-items-center">
           {skillsList.map((s) => (
-            <div key={`${s.label}-${Math.random * 10220}`} className="col-md-6">
+            <Col md={6} key={`${s.label}-${Math.random * 10220}`}>
               <div className="skill mb-4">
                 <div className="d-flex justify-content-between">
                   <h6 className="font-weight-bold">{s.label}</h6>
@@ -25,10 +25,10 @@ export function Skills({ hidden }) {
                 </div>
                 <ProgressBar now={s.progress} variant={s.color} />
               </div>
-            </div>
+            </Col>
           ))}
-        </div>
-      </div>
-    </div>
+        </Row>
+      </Container>
+    </Container>
   );
 }
