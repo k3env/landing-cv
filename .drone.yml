@@ -18,7 +18,7 @@ steps:
         - ${DRONE_COMMIT_SHA:0:8}
         - latest
   - name: deploy
-    image: ghcr.io/bh90210/dron8s:latest
+    image: bh90210/dron8s:latest
     settings:
       yaml: .ci/deployment.yaml
       tag: ${DRONE_COMMIT_SHA:0:8}
@@ -60,7 +60,7 @@ steps:
         - stable
         - latest
   - name: deploy
-    image: ghcr.io/bh90210/dron8s:latest
+    image: bh90210/dron8s:latest
     settings:
       yaml: .ci/deployment.yaml
       tag: ${DRONE_TAG}
