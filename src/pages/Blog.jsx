@@ -48,7 +48,15 @@ export function Blog({ hidden }) {
     <Container fluid className="pt-5" id="blog">
       <Container>
         <SectionHeading bgText="Блог" title="Последние посты" />
-        <Row>{posts.length > 0 ? posts.map((p) => <PostPreview key={p.id} {...p} />) : <Col>Ничего нет</Col>}</Row>
+        <Row>
+          {posts.length > 0 ? (
+            posts.map((p) => <PostPreview key={p.id} {...p} />)
+          ) : (
+            <Col className="d-flex align-items-center justify-content-center">
+              <h3>Ничего нет</h3>
+            </Col>
+          )}
+        </Row>
       </Container>
     </Container>
   );

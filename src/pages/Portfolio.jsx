@@ -114,16 +114,32 @@ export function Portfolio({ hidden }) {
     return projects.filter((p) => p.tags.find((v) => v._id === filter));
   };
 
+  // if (projects.length === 0) return <div />;
+
   return (
     <Container fluid className="pt-5 pb-3" id="portfolio">
       <Container>
         <SectionHeading bgText="Галерея" title="Портфолио" />
-        <TagSection filter={filter} setFilter={setFilter} />
-        <Row className="portfolio-container">
-          {filterProjects().map((p) => (
-            <PortfolioItem key={p._id} {...p} />
-          ))}
-        </Row>
+        {projects.length === 0 ? (
+          <Row>
+            <Col className="d-flex align-items-center justify-content-center">
+              <h3>Пока ничего нет</h3>
+            </Col>
+          </Row>
+        ) : (
+          <>
+            <TagSection filter={filter} setFilter={setFilter} />
+            <Row className="portfolio-container">
+              {filterProjects.length === 0 ? (
+                <Col className="d-flex align-items-center justify-content-center">
+                  <h3>Ничего не нашлось</h3>
+                </Col>
+              ) : (
+                filterProjects().map((p) => <PortfolioItem key={p._id} {...p} />)
+              )}
+            </Row>
+          </>
+        )}
       </Container>
     </Container>
   );
