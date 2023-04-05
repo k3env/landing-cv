@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
-  namespace: personal
+  name: page
+  namespace: landing
 spec:
   selector:
     matchLabels:
-      name: frontend
+      app: page
   template:
     metadata:
       labels:
-        name: frontend
+        app: page
     spec:
       containers:
-        - name: ui
+        - name: page
           image: k3env/landing-cv:{{.tag}}
           resources:
             limits:
