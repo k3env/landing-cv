@@ -17,6 +17,19 @@ export function About({ hidden }) {
     return placeholder;
   }
 
+  let textLookForWork = '';
+  switch (about.lookForJob) {
+    case 'active':
+      textLookForWork = 'В активном поиске';
+      break;
+    case 'passive':
+      textLookForWork = 'Готов рассмотреть';
+      break;
+    default:
+      textLookForWork = 'Не заинтересован';
+      break;
+  }
+
   function getDate() {
     return new Intl.DateTimeFormat('ru-RU').format(new Date(about.birth ?? Date.now()));
   }
@@ -70,16 +83,20 @@ export function About({ hidden }) {
               </Col>
               <Col sm={6} className="py-2">
                 <h6>
-                  Фриланс: <span className="text-secondary">{about.freelancer ? 'Беру заказы' : 'Недоступен'}</span>
+                  Предложения работы: <span className="text-secondary">{textLookForWork}</span>
                 </h6>
               </Col>
             </Row>
-            <Button variant="outline-primary" type="button" className="mr-4">
-              Нанять меня
-            </Button>
-            <Button variant="outline-primary" type="button">
-              Узнать больше
-            </Button>
+            {about.lookForJob !== 'not-interested' && (
+              <>
+                <Button variant="outline-primary" type="button" className="mr-4">
+                  Нанять меня
+                </Button>
+                <Button variant="outline-primary" type="button">
+                  Узнать больше
+                </Button>
+              </>
+            )}
           </Col>
         </Row>
       </Container>
