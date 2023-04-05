@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Collapse } from 'react-bootstrap';
+import Toggler from '../assets/toggler.svg';
 
 export function NavBar({ hidden, links }) {
   // console.log(className);
@@ -10,10 +11,10 @@ export function NavBar({ hidden, links }) {
 
   const [visible, toggle] = useState(false);
 
-  const mClassList = ['collapse', 'navbar-collapse', 'px-lg-3'];
-  if (visible) {
-    mClassList.push('show');
-  }
+  const mClassList = ['px-lg-3', 'navbar-collapse']; // ['collapse', 'navbar-collapse', 'px-lg-3'];
+  // if (visible) {
+  //   mClassList.push('show');
+  // }
 
   return (
     <nav className={classList.join(' ')}>
@@ -25,15 +26,14 @@ export function NavBar({ hidden, links }) {
       <button
         type="button"
         className="navbar-toggler"
-        data-toggle="collapse"
-        data-target="#navbarCollapse"
         onClick={() => {
           toggle(!visible);
         }}
       >
-        <span className="navbar-toggler-icon" />
+        {/* <span style={{ backgroundImage: Toggler }} /> */}
+        <img src={Toggler} alt="" />
       </button>
-      <div className={mClassList.join(' ')} id="navbarCollapse">
+      <Collapse in={visible} className={mClassList.join(' ')}>
         <div className="navbar-nav m-auto py-0">
           {links.map((l) => (
             <a
@@ -46,10 +46,10 @@ export function NavBar({ hidden, links }) {
             </a>
           ))}
         </div>
-        <Button variant="outline-primary" type="button" className="d-none d-lg-block">
-          Hire Me
-        </Button>
-      </div>
+        {/* <Button variant="outline-primary" type="button" className="d-none d-lg-block">
+          Нанять
+        </Button> */}
+      </Collapse>
     </nav>
   );
 }
