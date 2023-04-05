@@ -53,7 +53,7 @@ function App() {
     {
       title: 'Связаться',
       link: '#contact',
-      hidden: false,
+      hidden: true,
       component: <ContactForm key="sect-contact" />,
     },
   ];
