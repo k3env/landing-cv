@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: page
-  namespace: '{{.ns}}'
+  namespace: '$.ns'
 spec:
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: page
-          image: k3env/landing-cv:{{.tag}}
+          image: k3env/landing-cv:$.tag
           resources:
             limits:
               memory: '64Mi'
