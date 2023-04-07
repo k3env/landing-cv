@@ -109,12 +109,7 @@ export function Portfolio({ hidden }) {
       .then((v) => setProjects(v.data));
   }, []);
 
-  const filterProjects = () => {
-    if (filter === '*') return projects;
-    return projects.filter((p) => p.tags.find((v) => v._id === filter));
-  };
-
-  // if (projects.length === 0) return <div />;
+  const filterProjects = filter === '*' ? projects : projects.filter((p) => p.tags.find((v) => v._id === filter));
 
   return (
     <Container fluid className="pt-5 pb-3" id="portfolio">
@@ -135,7 +130,7 @@ export function Portfolio({ hidden }) {
                   <h3>Ничего не нашлось</h3>
                 </Col>
               ) : (
-                filterProjects().map((p) => <PortfolioItem key={p._id} {...p} />)
+                filterProjects.map((p) => <PortfolioItem key={p._id} {...p} />)
               )}
             </Row>
           </>
