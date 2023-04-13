@@ -16,7 +16,7 @@ export function Analytics() {
     payload.visitor = cookies.visitor;
   }
   useEffect(() => {
-    fetch('http://localhost:3300/analytics', {
+    fetch(import.meta.env.VITE_ANALYTICS_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
@@ -26,6 +26,5 @@ export function Analytics() {
       }
     });
   });
-  // console.log(payload);
   return <div />;
 }
