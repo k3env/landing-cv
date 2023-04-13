@@ -4,6 +4,9 @@ import { Col, Row, Modal, Badge, Container, Image, Button } from 'react-bootstra
 import ReactHtmlParser from 'react-html-parser';
 import { SectionHeading } from '../components/SectionHeading';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 function TagSection({ filter, setFilter }) {
   const [tags, setTags] = useState([]);
   useEffect(() => {

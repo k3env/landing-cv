@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/comfortaa": "^4.5.11",
+    "@fontsource/sofia-sans": "^4.5.1",
     "@keystone-6/document-renderer": "^1.1.2",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-html-parser": "^2.0.2",
     "react-slick": "^0.29.0",
     "react-typing-effect": "^2.0.5",

@@ -87,9 +87,9 @@ export function About({ hidden }) {
                 </h6>
               </Col>
             </Row>
-            {about.lookForJob !== 'not-interested' && (
+            {about.lookForJob !== 'not-interested' && false && (
               <>
-                <Button variant="outline-primary" type="button" className="mr-4">
+                <Button variant="outline-primary" type="button" className="me-4">
                   Нанять меня
                 </Button>
                 <Button variant="outline-primary" type="button">

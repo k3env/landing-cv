@@ -1,5 +1,6 @@
 import './App.css';
 import { useState } from 'react';
+import { withCookies } from 'react-cookie';
 import {
   NavBar,
   Header,
@@ -13,6 +14,7 @@ import {
   ContactForm,
   Footer,
 } from './pages';
+import { Analytics } from './components/AnalyticsComponent';
 
 function App() {
   const [showNav, setVisibility] = useState(false);
@@ -53,15 +55,18 @@ function App() {
     {
       title: 'Связаться',
       link: '#contact',
-      hidden: true,
+      hidden: false,
       component: <ContactForm key="sect-contact" />,
     },
   ];
 
   const navBarLinks = links.filter((l) => l.hidden !== true).map((l) => ({ title: l.title, link: l.link }));
 
+  const WrappedAnalytics = withCookies(Analytics);
+
   return (
     <div className="App" id="app">
+      <WrappedAnalytics />
       <NavBar hidden={!showNav} links={navBarLinks} />
       {links.filter((l) => l.hidden !== true).map((l) => l.component)}
       <Footer />

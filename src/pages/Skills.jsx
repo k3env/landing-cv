@@ -6,7 +6,7 @@ export function Skills({ hidden }) {
   const skillsList = [
     { label: 'HTML', progress: 70, color: 'orange' },
     { label: 'React', progress: 80, color: 'blue' },
-    { label: 'CSS', progress: 50, color: 'blue' },
+    { label: 'CSS', progress: 50, color: 'cyan' },
     { label: 'NodeJS', progress: 90, color: 'green' },
     { label: 'JS', progress: 80, color: 'yellow' },
     { label: 'Docker', progress: 80, color: 'blue' },
@@ -23,7 +23,9 @@ export function Skills({ hidden }) {
                   <h6 className="font-weight-bold">{s.label}</h6>
                   <h6 className="font-weight-bold">{s.progress}%</h6>
                 </div>
-                <ProgressBar now={s.progress} variant={s.color} />
+                <ProgressBar>
+                  <ProgressBar now={s.progress} style={{ backgroundColor: `var(--bs-${s.color})` }} />
+                </ProgressBar>
               </div>
             </Col>
           ))}

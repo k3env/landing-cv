@@ -21,7 +21,7 @@ function SocialBtn({ social, user }) {
       break;
   }
   return (
-    <Button as="a" variant="light" className="btn-social mr-2" href={link}>
+    <Button as="a" variant="light" className="btn-social m-2" href={link}>
       <i className={iconCls ?? `fa-solid ${icon}`} />
     </Button>
   );
