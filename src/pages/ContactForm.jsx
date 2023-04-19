@@ -1,6 +1,8 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { SectionHeading } from '../components/SectionHeading';
+import { add } from '../stores/toasts';
 
 export function ContactForm({ hidden }) {
   if (hidden) return <div />;
@@ -8,12 +10,24 @@ export function ContactForm({ hidden }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ reValidateMode: 'onChange' });
+
+  const dispatch = useDispatch();
   const onSubmit = (data) =>
-    fetch('http://localhost:3300/feedback', {
+    fetch(import.meta.env.VITE_FEEDBACK_URL, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },
+    }).then((r) => {
+      if (r.status === 204) {
+        reset();
+        dispatch(add({ id: crypto.randomUUID(), header: 'Обратная связь', message: 'Ваше сообщение отправлено!' }));
+      } else {
+        dispatch(
+          add({ id: crypto.randomUUID(), header: 'Обратная связь', message: 'Что-то пошло не так!', isError: true }),
+        );
+      }
     });
   return (
     <Container fluid className="py-5" id="contact">
@@ -25,7 +39,7 @@ export function ContactForm({ hidden }) {
               <div id="success" />
               <Form name="sentMessage" onSubmit={handleSubmit(onSubmit)}>
                 <Row className="pb-4">
-                  <Col sm={6}>
+                  <Col sm={6} className="my-2">
                     <Form.Group>
                       <Form.Control
                         className="p-2 px-4"
@@ -36,7 +50,7 @@ export function ContactForm({ hidden }) {
                       {errors.name && <p className="help-block text-danger">Введите Ваше имя</p>}
                     </Form.Group>
                   </Col>
-                  <Col sm={6}>
+                  <Col sm={6} className="my-2">
                     <Form.Group>
                       <Form.Control
                         className="p-2 px-4"

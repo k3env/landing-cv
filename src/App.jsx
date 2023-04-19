@@ -15,6 +15,7 @@ import {
   Footer,
 } from './pages';
 import { Analytics } from './components/AnalyticsComponent';
+import { NotificationContainer } from './components/NotificationContainer';
 
 function App() {
   const [showNav, setVisibility] = useState(false);
@@ -70,6 +71,7 @@ function App() {
       <NavBar hidden={!showNav} links={navBarLinks} />
       {links.filter((l) => l.hidden !== true).map((l) => l.component)}
       <Footer />
+      <NotificationContainer />
     </div>
   );
 }
