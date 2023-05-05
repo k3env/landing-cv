@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-export const slice = createSlice({
+const slice = createSlice({
   initialState: [],
   name: 'toastsSlice',
   reducers: {
@@ -9,11 +9,12 @@ export const slice = createSlice({
   },
 });
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     toasts: slice.reducer,
   },
 });
 
+export { slice, store }
 export const { add, remove } = slice.actions;
 export const { reducer } = slice;
